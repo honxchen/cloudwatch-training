@@ -9,7 +9,31 @@ Resources:
       Role: arn:aws:iam::494526681395:role/for-aws-training-2
       Code:
         S3Bucket: hongxing-deployment-bucket
-        S3Key: func/v4/cloudwatch-training-1.0-SNAPSHOT.jar
+        S3Key: func/v1/cloudwatch-training-1.0-SNAPSHOT.jar
       Runtime: java8
       Timeout: 60
       MemorySize: 512
+
+  RuleLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref MessageLambdaFunction
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "ScheduledRule"
+          - "Arn"
+
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "ScheduledRule"
+      ScheduleExpression: "rate(2 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - "MessageLambdaFunction"
+              - "Arn"
+          Id: "TargetFunctionV1"
