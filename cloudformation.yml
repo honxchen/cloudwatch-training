@@ -37,3 +37,47 @@ Resources:
               - "MessageLambdaFunction"
               - "Arn"
           Id: "TargetFunctionV1"
+
+  MetricAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: s3 object count alarm
+      AlarmName: hongxing-S3ObjectCountAlarm
+      Namespace: /aws/lambda/hongxing
+      MetricName: honxing-custom-memory-metric
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Statistic: Minimum
+      Threshold: 4.0
+      EvaluationPeriods: 1
+      Period: 300
+      AlarmActions:
+        - !Ref SNSTopic
+
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "hongxingTopic"
+
+  EmailSNsSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: 921261636@qq.com
+      Protocol: email
+      TopicArn: !Ref SNSTopic
+
+  SNSPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref SNSTopic
+      PolicyDocument:
+        Id: MyTopicPolicy
+        Version: '2012-10-17'
+        Statement:
+          - Sid: allow-alarm-subscription
+            Effect: Allow
+            Principal: '*'
+            Action:
+              - sns:Subscribe
+              - SNS:Publish
+            Resource: '*'
