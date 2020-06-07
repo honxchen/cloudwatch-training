@@ -9,7 +9,7 @@ Resources:
       Role: arn:aws:iam::494526681395:role/for-aws-training-2
       Code:
         S3Bucket: hongxing-deployment-bucket
-        S3Key: func/v2/cloudwatch-training-1.0-SNAPSHOT.jar
+        S3Key: func/v4/cloudwatch-training-1.0-SNAPSHOT.jar
       Runtime: java8
       Timeout: 60
       MemorySize: 512

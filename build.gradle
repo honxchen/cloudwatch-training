@@ -35,4 +35,5 @@ dependencies {
     runtimeOnly 'org.apache.logging.log4j:log4j-slf4j18-impl:2.13.0'
     runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.1.0'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-cloudwatch', version: '1.11.797'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.780'
 }
