@@ -6,6 +6,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Handler: com.xing.MessageHandler
+      FunctionName: hongxing-MessageLambdaFunction
       Role: arn:aws:iam::494526681395:role/for-aws-training-2
       Code:
         S3Bucket: hongxing-deployment-bucket
@@ -81,3 +82,14 @@ Resources:
               - sns:Subscribe
               - SNS:Publish
             Resource: '*'
+
+  CountMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName:
+        !Sub '/aws/lambda/${MessageLambdaFunction}'
+      FilterPattern: "[bucket=hongxing-deployment-bucket, has=has, count, unit]"
+      MetricTransformations:
+        - MetricValue: $count
+          MetricNamespace: /aws/lambda/hongxing
+          MetricName: hongxing-customer-metric-by-filter
